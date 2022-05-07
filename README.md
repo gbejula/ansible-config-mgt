@@ -1,5 +1,3 @@
 # ansible-config-mgt
 
-test
-
-new changes
+this is auto testing
