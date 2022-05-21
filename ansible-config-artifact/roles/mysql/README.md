@@ -33,7 +33,7 @@ The MySQL root user account details.
 
 Whether to force update the MySQL root user's password. By default, this role will only change the root user's password when MySQL is first configured. You can force an update by setting this to `yes`.
 
-> Note: If you get an error like `ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)` after a failed or interrupted playbook run, this usually means the root password wasn't originally updated to begin with. Try either removing  the `.my.cnf` file inside the configured `mysql_user_home` or updating it and setting `password=''` (the insecure default password). Run the playbook again, with `mysql_root_password_update` set to `yes`, and the setup should complete.
+> Note: If you get an error like `ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)` after a failed or interrupted playbook run, this usually means the root password wasn't originally updated to begin with. Try either removing the `.my.cnf` file inside the configured `mysql_user_home` or updating it and setting `password=''` (the insecure default password). Run the playbook again, with `mysql_root_password_update` set to `yes`, and the setup should complete.
 
 > Note: If you get an error like `ERROR 1698 (28000): Access denied for user 'root'@'localhost' (using password: YES)` when trying to log in from the CLI you might need to run as root or sudoer.
 
@@ -43,7 +43,7 @@ Whether MySQL should be enabled on startup.
 
     mysql_config_file: *default value depends on OS*
     mysql_config_include_dir: *default value depends on OS*
-    
+
 The main my.cnf configuration file and include directory.
 
     overwrite_global_mycnf: true
@@ -64,13 +64,13 @@ You can also delete a database (or ensure it's not on the server) by setting `st
 
 The MySQL users and their privileges. A user has the values:
 
-  - `name`
-  - `host` (defaults to `localhost`)
-  - `password` (can be plaintext or encrypted—if encrypted, set `encrypted: yes`)
-  - `encrypted` (defaults to `no`)
-  - `priv` (defaults to `*.*:USAGE`)
-  - `append_privs` (defaults to `no`)
-  - `state`  (defaults to `present`)
+- `name`
+- `host` (defaults to `localhost`)
+- `password` (can be plaintext or encrypted—if encrypted, set `encrypted: yes`)
+- `encrypted` (defaults to `no`)
+- `priv` (defaults to `*.*:USAGE`)
+- `append_privs` (defaults to `no`)
+- `state` (defaults to `present`)
 
 The formats of these are the same as in the `mysql_user` module.
 
@@ -133,22 +133,22 @@ Replication settings. Set `mysql_server_id` and `mysql_replication_role` by serv
 If you want to install MySQL from the official repository instead of installing the system default MariaDB equivalents, you can add the following `pre_tasks` task in your playbook:
 
 ```yaml
-  pre_tasks:
-    - name: Install the MySQL repo.
-      yum:
-        name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
-        state: present
-      when: ansible_os_family == "RedHat"
-  
-    - name: Override variables for MySQL (RedHat).
-      set_fact:
-        mysql_daemon: mysqld
-        mysql_packages: ['mysql-server']
-        mysql_log_error: /var/log/mysqld.err
-        mysql_syslog_tag: mysqld
-        mysql_pid_file: /var/run/mysqld/mysqld.pid
-        mysql_socket: /var/lib/mysql/mysql.sock
-      when: ansible_os_family == "RedHat"
+pre_tasks:
+  - name: Install the MySQL repo.
+    yum:
+      name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+      state: present
+    when: ansible_os_family == "RedHat"
+
+  - name: Override variables for MySQL (RedHat).
+    set_fact:
+      mysql_daemon: mysqld
+      mysql_packages: ['mysql-server']
+      mysql_log_error: /var/log/mysqld.err
+      mysql_syslog_tag: mysqld
+      mysql_pid_file: /var/run/mysqld/mysqld.pid
+      mysql_socket: /var/lib/mysql/mysql.sock
+    when: ansible_os_family == "RedHat"
 ```
 
 ### MariaDB usage
@@ -177,18 +177,18 @@ None.
       roles:
         - { role: geerlingguy.mysql }
 
-*Inside `vars/main.yml`*:
+_Inside `vars/main.yml`_:
 
     mysql_root_password: super-secure-password
     mysql_databases:
-      - name: example_db
+      - name: tooling
         encoding: latin1
         collation: latin1_general_ci
     mysql_users:
-      - name: example_user
+      - name: webaccess
         host: "%"
-        password: similarly-secure-password
-        priv: "example_db.*:ALL"
+        password: password
+        priv: "tooling.*:ALL"
 
 ## License
 
